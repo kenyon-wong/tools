@@ -43,6 +43,7 @@ jobs:
           go install -v github.com/projectdiscovery/notify/cmd/notify@latest
           go install -v github.com/projectdiscovery/asnmap/cmd/asnmap@latest
           go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
+          go install -v github.com/ffuf/ffuf@latest
         shell: bash
 
 
