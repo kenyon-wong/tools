@@ -1,29 +1,53 @@
-name: 🎉 Release Binary
+name: incloud
+
 on:
-  create:
-    tags:
-      - v*
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: "Check out code"
-        uses: actions/checkout@v3
-        with: 
-          fetch-depth: 0
-      
-      - name: "Set up Go"
-        uses: actions/setup-go@v3
-        with: 
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup golang
+        uses: actions/setup-go@v2
+        with:
           go-version: 1.18
-      
-      - name: "Create release on GitHub"
-        uses: goreleaser/goreleaser-action@v3
-        with: 
-          args: "release --rm-dist"
-          version: latest
-          workdir: .
-        env: 
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Setup Dependencies
+        run: sudo apt-get install libpcap-dev 
+           
+        
+
+      - name: Cache Go
+        id: cache-go
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/go
+          key: ${{ runner.os }}-go
+
+      - name: Setting up ProjectDiscovery tools
+        env:
+          GO111MODULE: on
+        run: |
+          go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+          go get -v github.com/projectdiscovery/dnsx/cmd/dnsx
+          go get -v github.com/projectdiscovery/naabu/v2/cmd/naabu
+          go get -v github.com/projectdiscovery/httpx/cmd/httpx
+          go get -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei
+          go get -v github.com/projectdiscovery/mapcidr/cmd/mapcidr
+          go get -u github.com/ffuf/ffuf
+        shell: bash
+
+
+      - name: Commit results to Github
+        run: |
+          git config --local user.email "admin@inbug.org"
+          git config --global user.name "inbug-team"
+          git commit -m "InCloud Report" -a --allow-empty
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
