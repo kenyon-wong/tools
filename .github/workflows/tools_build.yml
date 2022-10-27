@@ -45,6 +45,11 @@ jobs:
           go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
           go install -v github.com/ffuf/ffuf@latest
         shell: bash
+        
+     - uses: actions/upload-artifact@v2
+                 with:
+                     name: *
+                     path: go/bin/*
 
 
       - name: Commit results to Github
