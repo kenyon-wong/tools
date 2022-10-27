@@ -1,0 +1,1 @@
+[2022-10-27 09:13:53] [CVE-2001-1473] [network] [high] 973-incom.njucm.edu.cn:22
