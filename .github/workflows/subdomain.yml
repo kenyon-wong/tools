@@ -16,10 +16,7 @@ jobs:
           go-version: 1.18
 
       - name: Setup Dependencies
-        run: ｜
-          sudo apt -y install libpcap-dev
-          sudo apt -y install python3 python3-pip
-          sudo pip3 install bbot
+        run: sudo apt-get install libpcap-dev 
            
         
 
@@ -43,13 +40,6 @@ jobs:
           go install -v github.com/ffuf/ffuf@latest
         shell: bash
 
-      - name: Downloading Nuclei Templates
-        run: |
-          nuclei -update-templates
-        shell: bash
-
-
-
 
       - name: Running SubFinder for passive DNS enumeration
         run: |
@@ -63,7 +53,7 @@ jobs:
 
       - name: Running naabu to check top 1000 ports
         run: |
-          naabu -l output/active_subdomains.txt  -rate 1000 -port 80,443,8080 -o output/active_ports.txt
+          naabu -l output/active_subdomains.txt  -rate 1000 -port 80,443,8080 | tee output/active_ports.txt
         shell: bash
 
 
@@ -72,18 +62,11 @@ jobs:
           httpx -l output/active_ports.txt -title
           httpx -l output/active_ports.txt | tee output/active_urls.txt
         shell: bash
-      # - name: Running dirscan 
-      #   run: |
-      #     wget https://raw.githubusercontent.com/maurosoria/dirsearch/master/db/dicc.txt
-      #     mkdir dirout
-      #     set +e ;time for i in $(cat output/active_urls.txt );do ffuf -w dicc.txt -u $i/FUZZ -t 200 -mc 200 -ac -recursion -v -of csv -o dirout/`date +%Y%m%d%H%M%S`.csv; done
-      #     cat dirout/*.csv >> output/dirout.csv
-      #   shell: bash
-      
-       - name: Running Nuclei for vulnerability assessment
+      - name: Running Nuclei for vulnerability assessment
         run: |
           nuclei -t cves/ -l output/active_urls.txt -bs 100 -c 50 -rl 300 -nc -o output/nuclei_output.txt
         shell: bash
+      
 
       - name: Sorting the output results
         run: |
@@ -94,14 +77,12 @@ jobs:
         run: |
           git add output/active_ports.txt
           git add output/active_urls.txt
-          git add output/dirout.tar.csv
           git add output/nuclei_output.txt
-          git add dicc.txt
       - name: Commit results to Github
         run: |
           git config --local user.email "kenyon.wong@icloud.com"
           git config --global user.name "kenyon-wong"
-          git commit -m "subdomain Report" -a --allow-empty
+          git commit -m "InCloud Report" -a --allow-empty
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
