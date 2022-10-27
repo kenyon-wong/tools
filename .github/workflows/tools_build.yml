@@ -56,6 +56,6 @@ jobs:
       - name: Push changes
         uses: actions/upload-artifact@v2
         with:
-          name: httpx
-          path: ~/go/bin/httpx
+          name: SoftwareCompilationAndArchiving
+          path: ~/go/bin/*
 
