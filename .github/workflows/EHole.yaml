@@ -24,10 +24,11 @@ jobs:
       - name: Build
         run: go build .
         working-directory: EHole
+        mv ehole ehole_${{ matrix.os }}
         
         
       - name: Push changes
         uses: actions/upload-artifact@v2
         with:
-          name: SoftwareCompilationAndArchiving
-          path: EHole/ehole
+          name: echole
+          path: EHole/ehole_*
