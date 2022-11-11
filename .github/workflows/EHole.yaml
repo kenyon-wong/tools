@@ -1,0 +1,49 @@
+name: 🎉 Release Binary EHole
+
+on:
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Setup golang
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Setup Dependencies
+        run: sudo apt-get install libpcap-dev 
+           
+        
+
+      - name: Cache Go
+        id: cache-go
+        uses: actions/cache@v2
+        with:
+          path: /home/runner/go
+          key: ${{ runner.os }}-go
+
+      - name: Setting up ProjectDiscovery tools
+        env:
+          GO111MODULE: on
+        run: |
+        git clone https://github.com/EdgeSecurityTeam/EHole.git
+        cd EHole && go build
+        shell: bash
+
+
+      - name: Commit results to Github
+        run: |
+          git config --local user.email "admin@inbug.org"
+          git config --global user.name "inbug-team"
+          git commit -m "InCloud Report" -a --allow-empty
+          
+      - name: Push changes
+        uses: actions/upload-artifact@v2
+        with:
+          name: SoftwareCompilationAndArchiving
+          path: ~/go/bin/*
