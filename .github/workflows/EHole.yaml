@@ -22,14 +22,11 @@ jobs:
             git clone https://github.com/EdgeSecurityTeam/EHole.git
 
       - name: Build
-        run: go build . -o Ehole_${{ matrix.os }}
+        run: go build -o ehole_${{ matrix.os }} . 
         working-directory: EHole
 
-
-        
-        
       - name: Push changes
         uses: actions/upload-artifact@v2
         with:
           name: echole
-          path: EHole/ehole_*
+          path: EHole/ehole
