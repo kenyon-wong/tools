@@ -36,5 +36,5 @@ jobs:
     - name: Push changes
       uses: actions/upload-artifact@v2
       with:
-          name: 1
+          name: jar
           path: ./*.jar
