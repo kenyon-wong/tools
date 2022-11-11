@@ -37,4 +37,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: jar
-          path: ./*.jar
+          path: docker-java-app-example 1.0-SNAPSHOT.jar
