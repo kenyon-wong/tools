@@ -1,4 +1,4 @@
-name: 🎉 Release Binary EHole
+name: EHole
 
 on:
     workflow_dispatch:
@@ -31,8 +31,8 @@ jobs:
         env:
           GO111MODULE: on
         run: |
-        git clone https://github.com/EdgeSecurityTeam/EHole.git
-        cd EHole && go build
+            git clone https://github.com/EdgeSecurityTeam/EHole.git
+            cd EHole && go build
         shell: bash
 
 
