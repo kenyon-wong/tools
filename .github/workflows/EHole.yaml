@@ -24,17 +24,10 @@ jobs:
       - name: Build
         run: go build .
         working-directory: EHole
-
-      - name: Integration Tests
-        env:
-          GH_ACTION: true
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        run: |
-          chmod +x run.sh
-          bash run.sh ${{ matrix.os }}
-        working-directory: integration_tests/
-
-      - name: Race Condition Tests
-        if: ${{ matrix.os != 'windows-latest' }} # known issue: https://github.com/golang/go/issues/46099
-        run: go run -race . -u scanme.sh
-        working-directory: v2/cmd/nuclei/
+        
+        
+      - name: Push changes
+        uses: actions/upload-artifact@v2
+        with:
+          name: SoftwareCompilationAndArchiving
+          path: EHole/ehole
