@@ -34,4 +34,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: jar
-          path: ./*.jar
+          path: /home/runner/.m2/repository/com/levo/dockerexample/docker-java-app-example/1.0-SNAPSHOT/docker-java-app-example-1.0-SNAPSHOT.jar
